@@ -1,0 +1,154 @@
+﻿#reg-container {
+    background-color: #202F55;
+    width: 500px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+    /* override login.css alignment */
+    #reg-container #form {
+        align-items: stretch;
+    }
+
+#form h2 {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+/* name row */
+.name-row {
+    display: flex;
+    width: 100%;
+    gap: 15px;
+}
+
+/* columns */
+.input-group {
+    flex: 1;
+}
+
+/* ensure inputs stay half width */
+.name-row .login-input {
+    width: 100%;
+}
+
+
+
+/* register button */
+.reg-btn {
+    background-color: #2DD253;
+    color: #E7E7E7;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    width: 100%;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+    .reg-btn:hover {
+        background-color: #25AD44;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+.back-link {
+    margin-top: 20px;
+    color: #8d949e;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+    .back-link:hover {
+        color: #E7E7E7;
+    }
+
+/* --- GENDER SECTION & RADIO BUTTONS --- */
+.gender-section {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 15px; /* Matches .login-input margin-bottom */
+    box-sizing: border-box;
+}
+
+.gender-header {
+    color: #8d949e; /* Matches your login-input placeholder color */
+    font-size: 16px; /* Matches your login-input font size */
+    margin-right: 20px;
+}
+
+.radio-row {
+    display: flex;
+    align-items: center;
+    gap: 25px; /* Spacing between Male and Female options */
+}
+
+/* Styles the ASP.NET wrapper span and label */
+.custom-radio {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Spacing between the circle and the text */
+    color: #E7E7E7; /* Matches your button text color for readability */
+    font-size: 16px;
+    cursor: pointer;
+}
+
+    /* Basic sizing for the native radio circle */
+    .custom-radio input[type="radio"] {
+        margin: 0;
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+    }
+
+/* Override inline form title color */
+.form-title {
+    color: #EBA800;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+/* --- SUCCESS PANEL --- */
+.success-message {
+    text-align: center;
+    width: 100%;
+}
+
+.success-title {
+    color: #2DD253;
+    margin-bottom: 20px;
+}
+
+.success-text {
+    color: #8d949e;
+    margin-bottom: 15px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.pin-box {
+    background-color: #121A2F;
+    border: 2px dashed #EBA800;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.pin-text {
+    font-size: 32px;
+    font-weight: bold;
+    color: #EBA800;
+    letter-spacing: 5px;
+}
+
+.login-redirect-btn {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 30px;
+    box-sizing: border-box;
+}

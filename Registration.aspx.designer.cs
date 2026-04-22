@@ -24,6 +24,15 @@ namespace Main
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
+        /// pnlRegistration control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlRegistration;
+
+        /// <summary>
         /// firstNameTxt control.
         /// </summary>
         /// <remarks>
@@ -78,22 +87,31 @@ namespace Main
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvEmailTxt;
 
         /// <summary>
-        /// usernameTxt control.
+        /// cvEmailUnique control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox usernameTxt;
+        protected global::System.Web.UI.WebControls.CustomValidator cvEmailUnique;
 
         /// <summary>
-        /// rfvUsernameTxt control.
+        /// rbMale control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvUsernameTxt;
+        protected global::System.Web.UI.WebControls.RadioButton rbMale;
+
+        /// <summary>
+        /// rbFemale control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbFemale;
 
         /// <summary>
         /// passwordTxt control.
@@ -114,15 +132,6 @@ namespace Main
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPasswordTxt;
 
         /// <summary>
-        /// RangeValidator1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RangeValidator RangeValidator1;
-
-        /// <summary>
         /// cvPassword control.
         /// </summary>
         /// <remarks>
@@ -130,6 +139,15 @@ namespace Main
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CompareValidator cvPassword;
+
+        /// <summary>
+        /// revPasswordLength control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator revPasswordLength;
 
         /// <summary>
         /// confirmPassTxt control.
@@ -157,5 +175,23 @@ namespace Main
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button registerBtn;
+
+        /// <summary>
+        /// pnlSuccess control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlSuccess;
+
+        /// <summary>
+        /// lblPinDisplay control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPinDisplay;
     }
 }

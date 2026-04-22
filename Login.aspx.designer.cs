@@ -24,22 +24,22 @@ namespace Main
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// usernameTxt control.
+        /// pinTxt control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox usernameTxt;
+        protected global::System.Web.UI.WebControls.TextBox pinTxt;
 
         /// <summary>
-        /// rfvUsernameTxt control.
+        /// rfvpinTxt control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvUsernameTxt;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvpinTxt;
 
         /// <summary>
         /// passwordTxt control.

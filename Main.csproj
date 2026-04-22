@@ -44,6 +44,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
@@ -94,11 +97,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
-      <HintPath>packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="App_Data\BankingSystemDB.mdf" />
     <Content Include="App_Data\BankingSystemDB_log.ldf">
       <DependentUpon>BankingSystemDB.mdf</DependentUpon>
@@ -119,8 +117,30 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
-    <Content Include="Content\Login.css" />
-    <Content Include="Content\Registration.css" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-grid.css" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-grid.min.css" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-grid.rtl.css" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-grid.rtl.min.css" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-reboot.css" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-reboot.min.css" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-reboot.rtl.css" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-reboot.rtl.min.css" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-utilities.css" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-utilities.min.css" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-utilities.rtl.css" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-utilities.rtl.min.css" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap.css" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap.min.css" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap.rtl.css" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap.rtl.min.css" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\js\bootstrap.bundle.js" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\js\bootstrap.bundle.min.js" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\js\bootstrap.esm.js" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\js\bootstrap.esm.min.js" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\js\bootstrap.js" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\js\bootstrap.min.js" />
+    <Content Include="Content\styles\Login.css" />
+    <Content Include="Content\styles\Registration.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Dashboard.aspx" />
     <Content Include="favicon.ico" />
@@ -156,6 +176,28 @@
     <Content Include="Content\bootstrap-grid.rtl.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-grid.css.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-grid.min.css.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-grid.rtl.css.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-grid.rtl.min.css.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-reboot.css.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-reboot.rtl.css.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-reboot.rtl.min.css.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-utilities.css.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-utilities.min.css.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-utilities.rtl.css.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap-utilities.rtl.min.css.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap.css.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap.rtl.css.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\css\bootstrap.rtl.min.css.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\js\bootstrap.bundle.js.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\js\bootstrap.bundle.min.js.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\js\bootstrap.esm.js.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\js\bootstrap.esm.min.js.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\js\bootstrap.js.map" />
+    <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\js\bootstrap.min.js.map" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />

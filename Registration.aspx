@@ -1,101 +1,120 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Registration.aspx.cs" Inherits="Main.Registration" %>
 
-
-
 <!DOCTYPE html>
-
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head runat="server">
-
     <title>Registration - CTU Bank</title>
-
-    <link href="../Content/Login.css" rel="stylesheet" type="text/css" />
-
-    <link href="../Content/Registration.css" rel="stylesheet" type="text/css" />
-
+    <link href="../Content/styles/Login.css" rel="stylesheet" type="text/css" />
+    <link href="../Content/styles/Registration.css" rel="stylesheet" type="text/css" />
 </head>
-
 <body>
-
     <form id="form1" runat="server">
-
         <div class="container">
-
             <div id="reg-container">
-
                 <div id="form">
+                    
+                    <%-- REGISTRATION PANEL --%>
+                    <asp:Panel ID="pnlRegistration" runat="server">
+                        <h2 class="form-title">Create Account</h2>
+                        <div class="name-row">
+                            <div class="input-group">
+                                <asp:TextBox ID="firstNameTxt" runat="server" CssClass="login-input" placeholder="First name"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvFirstName" runat="server"
+                                   
+                                    ControlToValidate="firstNameTxt"
+                                    ErrorMessage="First name is required!"
+                                    Display="Dynamic"
+                                    ForeColor="Red" />
+                            </div>
+                            <div class="input-group">
+                                <asp:TextBox ID="lastNameTxt" runat="server" CssClass="login-input" placeholder="Last name"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvLastName" runat="server"
+                                   
+                                    ControlToValidate="lastNameTxt"
+                                    ErrorMessage="Last name is required!"
+                                    Display="Dynamic"
+                                    ForeColor="Red" />
+                            </div>
+                        </div>
+                        <%-- EMAIL --%>
+                        <asp:TextBox ID="emailTxt" runat="server" CssClass="login-input" placeholder="Email Address"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvEmailTxt" runat="server"
+                            ControlToValidate="emailTxt"
+                            ErrorMessage="Email is required!"
+                            Display="Dynamic"
+                            ForeColor="Red">
+                        </asp:RequiredFieldValidator>
 
-                    <h2 style="color: #EBA800;">Create Account</h2>
+                        <%--  EMAIL VALIDATOR (IF USED) --%>
+                        <asp:CustomValidator ID="cvEmailUnique" runat="server"
+                            ControlToValidate="emailTxt"
+                            ErrorMessage="This email is already registered!"
+                            Display="Dynamic"
+                            ForeColor="Red"
+                            OnServerValidate="Email_ServerValidate">
+                        </asp:CustomValidator>
 
-                    <div class="name-row">
+                        <%-- GENDER --%>
+                        <div class="gender-section">
+                            <span class="gender-header">Gender:</span>
+                            <div class="radio-row">
+                                <asp:RadioButton ID="rbMale" runat="server" GroupName="Gender" Text="Male" CssClass="custom-radio" />
+                                <asp:RadioButton ID="rbFemale" runat="server" GroupName="Gender" Text="Female" CssClass="custom-radio" />
+                            </div>
+                        </div>
+                        <%-- PASSWORD --%>
+                        <asp:TextBox ID="passwordTxt" runat="server" CssClass="login-input" TextMode="Password" placeholder="Password"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvPasswordTxt" runat="server"
+                            ControlToValidate="passwordTxt"
+                            ErrorMessage="Password is required!"
+                            ForeColor="Red"
+                            Display="Dynamic">
+                        </asp:RequiredFieldValidator>
 
-                        <div class="input-group">
-                            <asp:TextBox ID="firstNameTxt" runat="server" CssClass="login-input" placeholder="First name"></asp:TextBox>
-                            <asp:RequiredFieldValidator ID="rfvFirstName" runat="server"
-                                CssClass="validator"
-                                ControlToValidate="firstNameTxt"
-                                ErrorMessage="First name is required!"
-                                ForeColor="Red" />
+                        <asp:CompareValidator ID="cvPassword" runat="server"
+                            ControlToValidate="confirmPassTxt"
+                            ControlToCompare="passwordTxt"
+                            ForeColor="Red"
+                            Display="Dynamic"
+                            ErrorMessage="Password does not match"></asp:CompareValidator>
+                        <asp:RegularExpressionValidator ID="revPasswordLength" runat="server"
+                            ControlToValidate="passwordTxt"
+                            ValidationExpression="^.{8,20}$"
+                            ForeColor="Red"
+                            Display="Dynamic"
+                            ErrorMessage="Password must be between 8 and 20 characters!">
+                        </asp:RegularExpressionValidator>
+
+                        <asp:TextBox ID="confirmPassTxt" runat="server" CssClass="login-input" TextMode="Password" placeholder="Confirm Password"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvConfirmPassTxt" runat="server"
+                            ControlToValidate="confirmPassTxt"
+                            ErrorMessage="Confirm Password is required!"
+                            ForeColor="Red"
+                            Display="Dynamic">
+                        </asp:RequiredFieldValidator>
+                        <asp:Button ID="registerBtn" runat="server" CssClass="reg-btn" Text="Register" OnClick="registerBtn_Click" />
+                        <a href="Login.aspx" class="back-link">Already have an account? Login here</a>
+                    </asp:Panel>
+
+                    <%-- SUCCESS PANEL --%>
+                    <asp:Panel ID="pnlSuccess" runat="server" Visible="false" CssClass="success-message">
+                        <h2 class="success-title">Registration Successful!</h2>
+                        <p class="success-text">Welcome to CTU Bank. Your account has been created.</p>
+                        <p class="success-text">Please save your assigned PIN. You will use this as your <strong>Username</strong> to login.</p>
+                        
+                        <div class="pin-box">
+                            <asp:Label ID="lblPinDisplay" runat="server" Text="" CssClass="pin-text"></asp:Label>
                         </div>
 
-                        <div class="input-group">
-                            <asp:TextBox ID="lastNameTxt" runat="server" CssClass="login-input" placeholder="Last name"></asp:TextBox>
-                            <asp:RequiredFieldValidator ID="rfvLastName" runat="server"
-                                CssClass="validator"
-                                ControlToValidate="lastNameTxt"
-                                ErrorMessage="Last name is required!"
-                                ForeColor="Red" />
-                        </div>
+                        <a href="Login.aspx" class="reg-btn login-redirect-btn">Go to Login</a>
+                    </asp:Panel>
 
-                    </div>
-
-                    <asp:TextBox ID="emailTxt" runat="server" CssClass="login-input" placeholder="Email Address"></asp:TextBox>
-
-                    <asp:RequiredFieldValidator ID="rfvEmailTxt" runat="server"
-                        ControlToValidate="emailTxt"
-                        ErrorMessage="Email is required!"
-                        ForeColor="Red">
-                    </asp:RequiredFieldValidator>
-                    <asp:TextBox ID="usernameTxt" runat="server" CssClass="login-input" placeholder="Username"></asp:TextBox>
-
-                    <asp:RequiredFieldValidator ID="rfvUsernameTxt" runat="server"
-                        ControlToValidate="usernameTxt"
-                        ErrorMessage="Username is required!"
-                        ForeColor="Red">
-                    </asp:RequiredFieldValidator>
-
-                    <asp:TextBox ID="passwordTxt" runat="server" CssClass="login-input" TextMode="Password" placeholder="Password"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="rfvPasswordTxt" runat="server"
-                        ControlToValidate="passwordTxt"
-                        ErrorMessage="Password is required!"
-                        ForeColor="Red">
-                    </asp:RequiredFieldValidator>
-
-                    <asp:RangeValidator ID="RangeValidator1" runat="server"
-                        ControlToValidate="passwordTxt"
-                        MinimumValue="8"
-                        ErrorMessage=""></asp:RangeValidator>
-
-                    <asp:CompareValidator ID="cvPassword" runat="server"
-                        ControlToValidate="confirmPassTxt"
-                        ControlToCompare="passwordTxt"
-                        ForeColor="Red"
-                        ErrorMessage="Password does not match"></asp:CompareValidator>
-
-                    <asp:TextBox ID="confirmPassTxt" runat="server" CssClass="login-input" TextMode="Password" placeholder="Confirm Password"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="rfvConfirmPassTxt" runat="server"
-                        ControlToValidate="confirmPassTxt"
-                        ErrorMessage="Confirm Password is required!"
-                        ForeColor="Red">
-                    </asp:RequiredFieldValidator>
-
-                    <asp:Button ID="registerBtn" runat="server" CssClass="reg-btn" Text="Register" OnClick="registerBtn_Click" />
-                    <a href="Login.aspx" class="back-link">Already have an account? Login here</a>
                 </div>
             </div>
         </div>
     </form>
+
+    <script src="Content/bootstrap/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="Content/script/ModalJS.js"></script>
 </body>
 </html>
-
