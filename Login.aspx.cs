@@ -25,7 +25,7 @@ namespace Main
             string password = passwordTxt.Text.Trim();
             errorLbl.Text = "";
 
-            if(!int.TryParse(pinTxt.Text.Trim(), out int pin))
+            if (!int.TryParse(pinTxt.Text.Trim(), out int pin))
             {
                 errorLbl.Text = "Please enter a valid numeric PIN";
                 return;
@@ -36,18 +36,14 @@ namespace Main
 
             if (isSuccessLogin)
             {
-                Session["LoggedInPin"] = pin;
+                // FIX IS HERE: Changed "LoggedInPin" to "AccountNumber"
+                Session["AccountNumber"] = pin;
                 Response.Redirect("Index.aspx");
             }
             else
             {
-                errorLbl.Text = "Invalid PIN or Account Number. Please Try again.";
+                errorLbl.Text = "Invalid PIN or Password. Please Try again.";
             }
-
-
-
-
-
         }
     }
 }

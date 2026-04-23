@@ -1,147 +1,313 @@
 ﻿using System;
-using System.Data;
-using System.Data.SqlClient;
+using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Configuration; // Add this if pulling connection string from Web.config
+using Main.Classes;
 
 namespace Main
 {
     public partial class Index : System.Web.UI.Page
     {
-        // Update this to your actual connection string source
-        private string connectionString = "Server=YOURSERVER;Database=YOURDB;Trusted_Connection=True;";
-
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["AccountNumber"] == null)
+            {
+                Response.Redirect("Login.aspx");
+                return;
+            }
+
             if (!IsPostBack)
             {
-                // Default View Setup
-                mvDashboard.ActiveViewIndex = 0;
-                UpdateFilterDropdownOptions();
-                BindCurrentData();
+                int currentAccountNo = Convert.ToInt32(Session["AccountNumber"]);
+                UserManager userManager = new UserManager();
+
+                string firstName = userManager.GetUserFirstName(currentAccountNo);
+                lblUserName.Text = firstName;
+                if (!string.IsNullOrEmpty(firstName)) lblProfileInitial.Text = firstName.Substring(0, 1).ToUpper();
+
+                LoadDashboardStats();
+                UpdateFilterState();
+                BindCurrentTable();
             }
         }
 
-        // --- NAVIGATION LOGIC ---
-        protected void Menu_Click(object sender, EventArgs e)
+        // ==========================================
+        // SIDEBAR NAVIGATION
+        // ==========================================
+        protected void Sidebar_Click(object sender, EventArgs e)
         {
             LinkButton clickedBtn = (LinkButton)sender;
             int viewIndex = int.Parse(clickedBtn.CommandArgument);
 
-            // Change Active View
-            mvDashboard.ActiveViewIndex = viewIndex;
-
-            // Reset CSS classes for sidebar
-            btnMenuStatement.CssClass = "menu-item";
-            btnMenuDeposits.CssClass = "menu-item";
-            btnMenuTransactions.CssClass = "menu-item";
-            btnDashboard.CssClass = "menu-item";
-
-            // Highlight active menu and set title
+            mvMainContent.ActiveViewIndex = viewIndex;
+            btnSidebarDashboard.CssClass = "menu-item";
+            btnSidebarManage.CssClass = "menu-item";
             clickedBtn.CssClass = "menu-item active";
-            lblPageTitle.Text = clickedBtn.Text;
 
-            // Update DropDown options based on new view
-            UpdateFilterDropdownOptions();
-
-            // Fetch new data
-            BindCurrentData();
+            if (viewIndex == 0) LoadDashboardStats();
         }
 
-        // --- DYNAMIC FILTER DROPDOWN ---
-        private void UpdateFilterDropdownOptions()
+        protected void btnSidebarLogout_Click(object sender, EventArgs e)
+        {
+            Session.Clear();
+            Session.Abandon();
+            Response.Redirect("Login.aspx");
+        }
+
+        // ==========================================
+        // DASHBOARD PROFILE STATS
+        // ==========================================
+        private void LoadDashboardStats()
+        {
+            int currentAccountNo = Convert.ToInt32(Session["AccountNumber"]);
+            UserManager userManager = new UserManager();
+            TransactionManager txManager = new TransactionManager();
+
+            string name, dateReg;
+            userManager.GetDashboardDetails(currentAccountNo, out name, out dateReg);
+            decimal balance = txManager.GetBalance(currentAccountNo);
+            decimal totalSent = txManager.GetTotalSent(currentAccountNo);
+
+            lblDashAccountNo.Text = currentAccountNo.ToString();
+            lblDashName.Text = name;
+            lblDashDateReg.Text = dateReg;
+            lblDashBalance.Text = balance.ToString("N2");
+            lblDashTotalSent.Text = totalSent.ToString("N2");
+        }
+
+        // ==========================================
+        // ACTION PANELS (DEPOSIT/WITHDRAW/SEND)
+        // ==========================================
+        protected void Action_Click(object sender, EventArgs e)
+        {
+            Button clickedBtn = (Button)sender;
+            int actionIndex = int.Parse(clickedBtn.CommandArgument);
+
+            mvActions.ActiveViewIndex = (mvActions.ActiveViewIndex == actionIndex) ? -1 : actionIndex;
+
+            if (actionIndex == 1) // Withdraw Panel Selected -> Load Balance
+            {
+                TransactionManager txManager = new TransactionManager();
+                lblWithdrawBalance.Text = txManager.GetBalance(Convert.ToInt32(Session["AccountNumber"])).ToString("N2");
+            }
+        }
+
+        // RULES: Min 100, Max 2000, Divisible by 100
+        private bool IsValidAmount(decimal amount)
+        {
+            return amount >= 100 && amount <= 2000 && (amount % 100 == 0);
+        }
+
+        protected void btnSubmitDeposit_Click(object sender, EventArgs e)
+        {
+            decimal amount;
+            if (decimal.TryParse(txtDepositAmount.Text, out amount))
+            {
+                if (!IsValidAmount(amount))
+                {
+                    ShowAlert("Deposit must be between ₱100 and ₱2,000, and divisible by 100.");
+                    return;
+                }
+
+                int currentAccount = Convert.ToInt32(Session["AccountNumber"]);
+                TransactionManager txManager = new TransactionManager();
+
+                if (txManager.GetBalance(currentAccount) + amount > 10000)
+                {
+                    ShowAlert("Deposit failed. Maximum account balance cannot exceed ₱10,000.00.");
+                    return;
+                }
+
+                string result = txManager.ProcessDeposit(currentAccount, amount);
+                if (result == "Success")
+                {
+                    ShowAlert("Deposit successful!");
+                    txtDepositAmount.Text = "";
+                    mvActions.ActiveViewIndex = -1;
+                    BindCurrentTable();
+                }
+                else ShowAlert(result);
+            }
+            else ShowAlert("Please enter a valid numeric amount.");
+        }
+
+        protected void btnSubmitWithdraw_Click(object sender, EventArgs e)
+        {
+            decimal amount;
+            if (decimal.TryParse(txtWithdrawAmount.Text, out amount))
+            {
+                if (!IsValidAmount(amount))
+                {
+                    ShowAlert("Withdrawal must be between ₱100 and ₱2,000, and divisible by 100.");
+                    return;
+                }
+
+                int currentAccount = Convert.ToInt32(Session["AccountNumber"]);
+                TransactionManager txManager = new TransactionManager();
+
+                if (txManager.GetBalance(currentAccount) < amount)
+                {
+                    ShowAlert("Insufficient funds.");
+                    return;
+                }
+
+                string result = txManager.ProcessWithdraw(currentAccount, amount);
+                if (result == "Success")
+                {
+                    ShowAlert("Withdrawal successful!");
+                    txtWithdrawAmount.Text = "";
+                    mvActions.ActiveViewIndex = -1;
+                    BindCurrentTable();
+                }
+                else ShowAlert(result);
+            }
+            else ShowAlert("Please enter a valid numeric amount.");
+        }
+
+        // ==========================================
+        // SEND CLOUDMONEY LOGIC
+        // ==========================================
+        protected void btnVerifyReceiver_Click(object sender, EventArgs e)
+        {
+            int receiverAccount;
+            if (int.TryParse(txtSendAccount.Text, out receiverAccount))
+            {
+                UserManager userManager = new UserManager();
+                string receiverName = userManager.GetReceiverName(receiverAccount);
+
+                if (!string.IsNullOrEmpty(receiverName))
+                {
+                    lblReceiverName.Text = $"{receiverName} (Account: {receiverAccount})";
+                    pnlVerifyReceiver.Visible = false;
+                    pnlSendMoneyForm.Visible = true;
+                }
+                else ShowAlert("Receiver account does not exist.");
+            }
+            else ShowAlert("Invalid Account Number format.");
+        }
+
+        protected void btnCancelSend_Click(object sender, EventArgs e)
+        {
+            txtSendAccount.Text = "";
+            txtSendAmount.Text = "";
+            txtSendPassword.Text = "";
+            pnlVerifyReceiver.Visible = true;
+            pnlSendMoneyForm.Visible = false;
+        }
+
+        protected void btnSubmitSend_Click(object sender, EventArgs e)
+        {
+            decimal amount;
+            if (decimal.TryParse(txtSendAmount.Text, out amount))
+            {
+                if (!IsValidAmount(amount))
+                {
+                    ShowAlert("Amount must be between ₱100 and ₱2,000, and divisible by 100.");
+                    return;
+                }
+
+                int currentAccount = Convert.ToInt32(Session["AccountNumber"]);
+                int receiverAccount = Convert.ToInt32(txtSendAccount.Text);
+                string password = txtSendPassword.Text;
+
+                UserManager userManager = new UserManager();
+                TransactionManager txManager = new TransactionManager();
+
+                if (txManager.GetBalance(currentAccount) < amount)
+                {
+                    ShowAlert("Insufficient funds.");
+                    return;
+                }
+
+                if (!userManager.UserLogin(currentAccount, password))
+                {
+                    ShowAlert("Security Verification Failed: Incorrect password.");
+                    return;
+                }
+
+                string result = txManager.SendCloudMoney(currentAccount, receiverAccount, amount);
+                if (result == "Success")
+                {
+                    ShowAlert("Money sent successfully!");
+                    btnCancelSend_Click(null, null); // Resets the form
+                    mvActions.ActiveViewIndex = -1;
+                    BindCurrentTable();
+                }
+                else ShowAlert(result);
+            }
+            else ShowAlert("Please enter a valid amount.");
+        }
+
+        // ==========================================
+        // DATA TABLES & FILTERING
+        // ==========================================
+        private void ShowAlert(string message)
+        {
+            string script = $"alert('{message.Replace("'", "\\'")}');";
+            ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
+        }
+
+        protected void TableTab_Click(object sender, EventArgs e)
+        {
+            LinkButton clickedTab = (LinkButton)sender;
+            mvTables.ActiveViewIndex = int.Parse(clickedTab.CommandArgument);
+            btnTabStatement.CssClass = "tab-btn"; btnTabDeposits.CssClass = "tab-btn"; btnTabTransactions.CssClass = "tab-btn";
+            clickedTab.CssClass = "tab-btn active";
+            UpdateFilterState();
+            BindCurrentTable();
+        }
+
+        private void UpdateFilterState()
         {
             ddlType.Items.Clear();
             ddlType.Items.Add(new ListItem("All", "All"));
 
-            if (mvDashboard.ActiveViewIndex == 1) // Deposits / Withdrawals
+            if (mvTables.ActiveViewIndex == 0) lblFilterTitle.Text = "My Statement of Account";
+            else if (mvTables.ActiveViewIndex == 1)
             {
+                lblFilterTitle.Text = "My Deposits or Withdrawals";
                 ddlType.Items.Add(new ListItem("Deposit (D)", "D"));
                 ddlType.Items.Add(new ListItem("Withdrawal (W)", "W"));
             }
-            else if (mvDashboard.ActiveViewIndex == 2) // Transactions
+            else if (mvTables.ActiveViewIndex == 2)
             {
+                lblFilterTitle.Text = "My Sent or Received Transactions";
                 ddlType.Items.Add(new ListItem("Sent", "Sent"));
                 ddlType.Items.Add(new ListItem("Received", "Received"));
             }
-            // View 0 (Statement) only needs "All" or optional items.
         }
 
-        // --- FILTER CLICK ---
-        protected void btnFilter_Click(object sender, EventArgs e)
-        {
-            BindCurrentData();
-        }
+        protected void btnList_Click(object sender, EventArgs e) { BindCurrentTable(); }
 
-        // --- DATA BINDING ROUTER ---
-        private void BindCurrentData()
+        private void BindCurrentTable()
         {
+            if (Session["AccountNumber"] == null) return;
+
+            int currentAccountNo = Convert.ToInt32(Session["AccountNumber"]);
             string fromDate = txtFromDate.Text;
             string toDate = txtToDate.Text;
             string type = ddlType.SelectedValue;
 
-            if (mvDashboard.ActiveViewIndex == 0)
-                BindStatement(fromDate, toDate);
-            else if (mvDashboard.ActiveViewIndex == 1)
-                BindDeposits(fromDate, toDate, type);
-            else if (mvDashboard.ActiveViewIndex == 2)
-                BindTransactions(fromDate, toDate, type);
-        }
+            TransactionManager txManager = new TransactionManager();
 
-        // --- SQL DATA FETCHING ---
-        private void BindStatement(string fromDate, string toDate)
-        {
-            // Example ADO.NET SQL setup
-            /*
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            if (mvTables.ActiveViewIndex == 0)
             {
-                string query = "SELECT Date, Description, Debit, Credit, Balance FROM StatementTable WHERE 1=1";
-                if (!string.IsNullOrEmpty(fromDate)) query += " AND Date >= @From";
-                if (!string.IsNullOrEmpty(toDate)) query += " AND Date <= @To";
-
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                {
-                    if (!string.IsNullOrEmpty(fromDate)) cmd.Parameters.AddWithValue("@From", fromDate);
-                    if (!string.IsNullOrEmpty(toDate)) cmd.Parameters.AddWithValue("@To", toDate);
-
-                    SqlDataAdapter da = new SqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-                    gvStatement.DataSource = dt;
-                    gvStatement.DataBind();
-                }
+                gvStatement.DataSource = txManager.GetStatement(currentAccountNo, fromDate, toDate);
+                gvStatement.DataBind();
             }
-            */
+            else if (mvTables.ActiveViewIndex == 1)
+            {
+                gvDeposits.DataSource = txManager.GetDepositsWithdrawals(currentAccountNo, fromDate, toDate, type);
+                gvDeposits.DataBind();
+            }
+            else if (mvTables.ActiveViewIndex == 2)
+            {
+                gvTransactions.DataSource = txManager.GetTransfers(currentAccountNo, fromDate, toDate, type);
+                gvTransactions.DataBind();
+            }
         }
 
-        private void BindDeposits(string fromDate, string toDate, string type)
-        {
-            // Same logic as above, but for Deposits Table
-            // if (type != "All") query += " AND Type = @Type";
-        }
-
-        private void BindTransactions(string fromDate, string toDate, string type)
-        {
-            // Same logic as above, but for Transactions Table
-        }
-
-        // --- GRIDVIEW PAGING EVENTS ---
-        protected void gvStatement_PageIndexChanging(object sender, GridViewPageEventArgs e)
-        {
-            gvStatement.PageIndex = e.NewPageIndex;
-            BindCurrentData();
-        }
-
-        protected void gvDeposits_PageIndexChanging(object sender, GridViewPageEventArgs e)
-        {
-            gvDeposits.PageIndex = e.NewPageIndex;
-            BindCurrentData();
-        }
-
-        protected void gvTransactions_PageIndexChanging(object sender, GridViewPageEventArgs e)
-        {
-            gvTransactions.PageIndex = e.NewPageIndex;
-            BindCurrentData();
-        }
+        protected void gvStatement_PageIndexChanging(object sender, GridViewPageEventArgs e) { gvStatement.PageIndex = e.NewPageIndex; BindCurrentTable(); }
+        protected void gvDeposits_PageIndexChanging(object sender, GridViewPageEventArgs e) { gvDeposits.PageIndex = e.NewPageIndex; BindCurrentTable(); }
+        protected void gvTransactions_PageIndexChanging(object sender, GridViewPageEventArgs e) { gvTransactions.PageIndex = e.NewPageIndex; BindCurrentTable(); }
     }
 }
