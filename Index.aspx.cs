@@ -9,23 +9,21 @@ namespace Main
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["AccountNumber"] == null)
-            {
-                Response.Redirect("Login.aspx");
-                return;
-            }
+            if (Session["AccountNumber"] == null) { Response.Redirect("Login.aspx"); return; }
+
+            // Always rebuild the filter dropdown on every load
+            UpdateFilterState();
 
             if (!IsPostBack)
             {
                 int currentAccountNo = Convert.ToInt32(Session["AccountNumber"]);
                 UserManager userManager = new UserManager();
-
                 string firstName = userManager.GetUserFirstName(currentAccountNo);
                 lblUserName.Text = firstName;
-                if (!string.IsNullOrEmpty(firstName)) lblProfileInitial.Text = firstName.Substring(0, 1).ToUpper();
+                if (!string.IsNullOrEmpty(firstName))
+                    lblProfileInitial.Text = firstName.Substring(0, 1).ToUpper();
 
                 LoadDashboardStats();
-                UpdateFilterState();
                 BindCurrentTable();
             }
         }
@@ -224,6 +222,18 @@ namespace Main
                     return;
                 }
 
+                if (receiverAccount == currentAccount)
+                {
+                    ShowAlert("You cannot send money to yourself.");
+                    return;
+                }
+
+                if (txManager.GetBalance(receiverAccount) + amount > 10000)
+                {
+                    ShowAlert("Transfer failed. Recipient's balance would exceed ₱10,000.00.");
+                    return;
+                }
+
                 string result = txManager.SendCloudMoney(currentAccount, receiverAccount, amount);
                 if (result == "Success")
                 {
@@ -276,7 +286,25 @@ namespace Main
             }
         }
 
-        protected void btnList_Click(object sender, EventArgs e) { BindCurrentTable(); }
+        protected void btnList_Click(object sender, EventArgs e)
+        {
+            // Date validation
+            DateTime today = DateTime.Today;
+
+            if (!string.IsNullOrEmpty(txtFromDate.Text) && DateTime.Parse(txtFromDate.Text) > today)
+            { ShowAlert("From date cannot be a future date."); return; }
+
+            if (!string.IsNullOrEmpty(txtToDate.Text) && DateTime.Parse(txtToDate.Text) > today)
+            { ShowAlert("To date cannot be a future date."); return; }
+
+            if (!string.IsNullOrEmpty(txtFromDate.Text) && !string.IsNullOrEmpty(txtToDate.Text))
+            {
+                if (DateTime.Parse(txtFromDate.Text) > DateTime.Parse(txtToDate.Text))
+                { ShowAlert("From date must be earlier than To date."); return; }
+            }
+
+            BindCurrentTable();
+        }
 
         private void BindCurrentTable()
         {
@@ -304,6 +332,8 @@ namespace Main
                 gvTransactions.DataSource = txManager.GetTransfers(currentAccountNo, fromDate, toDate, type);
                 gvTransactions.DataBind();
             }
+
+            
         }
 
         protected void gvStatement_PageIndexChanging(object sender, GridViewPageEventArgs e) { gvStatement.PageIndex = e.NewPageIndex; BindCurrentTable(); }
