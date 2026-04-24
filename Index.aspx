@@ -6,15 +6,17 @@
     <title>CTU - E Wallet</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
     <link href="../Content/styles/LandingPage.css" rel="stylesheet" type="text/css" />
+  
 </head>
 <body>
     <form id="form1" runat="server">
         <div class="layout-wrapper">
-            
+
             <div class="sidebar">
                 <div class="sidebar-menu" style="margin-top: 20px;">
                     <asp:LinkButton ID="btnSidebarDashboard" runat="server" CssClass="menu-item active" OnClick="Sidebar_Click" CommandArgument="0">Dashboard</asp:LinkButton>
                     <asp:LinkButton ID="btnSidebarManage" runat="server" CssClass="menu-item" OnClick="Sidebar_Click" CommandArgument="1">Manage Funds</asp:LinkButton>
+                    <asp:LinkButton ID="btnSidebarChangePassword" runat="server" CssClass="menu-item" OnClick="btnSidebarChangePassword_Click" CausesValidation="false">Change Password</asp:LinkButton>
                     <asp:LinkButton ID="btnSidebarLogout" runat="server" CssClass="menu-item logout-btn" OnClick="btnSidebarLogout_Click" CausesValidation="false">Log-out</asp:LinkButton>
                 </div>
             </div>
@@ -32,7 +34,7 @@
 
                 <div class="content-container">
                     <asp:MultiView ID="mvMainContent" runat="server" ActiveViewIndex="0">
-                        
+
                         <asp:View ID="vwDashboardStats" runat="server">
                             <div class="card" style="max-width: 600px; margin: 0 auto;">
                                 <h2 class="table-header-title">My Dashboard</h2>
@@ -77,19 +79,35 @@
                                     <asp:View ID="vwSend" runat="server">
                                         <div class="action-panel">
                                             <h3>Send CloudMoney</h3>
+
+                                            <%-- STEP 1: Enter account number --%>
                                             <asp:Panel ID="pnlVerifyReceiver" runat="server">
                                                 <asp:TextBox ID="txtSendAccount" runat="server" CssClass="form-input" placeholder="Recipient Account No."></asp:TextBox>
                                                 <asp:Button ID="btnVerifyReceiver" runat="server" Text="Verify Receiver" CssClass="btn-submit" OnClick="btnVerifyReceiver_Click" />
                                             </asp:Panel>
 
+                                            <%-- STEP 2: Show verified receiver info (Fix #8) --%>
+                                            <%-- Replaced single combined label with a proper info card --%>
+                                            <asp:Panel ID="pnlReceiverInfo" runat="server" Visible="false">
+                                                <div class="receiver-info-panel">
+                                                    <span class="info-label">Sending To</span>
+                                                    <hr class="receiver-info-divider" />
+                                                    <span class="info-label">Account No.</span>
+                                                    <asp:Label ID="lblReceiverAccountNo" runat="server" CssClass="info-value highlight"></asp:Label>
+                                                    <span class="info-label">Name</span>
+                                                    <asp:Label ID="lblReceiverName" runat="server" CssClass="info-value"></asp:Label>
+                                                </div>
+                                            </asp:Panel>
+
+                                            <%-- STEP 3: Amount + password form --%>
                                             <asp:Panel ID="pnlSendMoneyForm" runat="server" Visible="false" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                                                <p style="color:#EBA800; font-weight:bold;">Sending to: <asp:Label ID="lblReceiverName" runat="server"></asp:Label></p>
                                                 <p style="font-size:12px; color:#A0AABF;">Min: ₱100 | Max: ₱2,000 | Must be divisible by 100</p>
                                                 <asp:TextBox ID="txtSendAmount" runat="server" CssClass="form-input" placeholder="Amount"></asp:TextBox>
                                                 <asp:TextBox ID="txtSendPassword" runat="server" CssClass="form-input" placeholder="Enter Your Password" TextMode="Password"></asp:TextBox>
                                                 <asp:Button ID="btnSubmitSend" runat="server" Text="Send Money" CssClass="btn-submit" OnClick="btnSubmitSend_Click" />
                                                 <asp:Button ID="btnCancelSend" runat="server" Text="Cancel" CssClass="btn-filter" OnClick="btnCancelSend_Click" />
                                             </asp:Panel>
+
                                         </div>
                                     </asp:View>
                                 </asp:MultiView>
@@ -110,6 +128,8 @@
                                         <label>Type</label>
                                         <asp:DropDownList ID="ddlType" runat="server" CssClass="filter-input-centered"><asp:ListItem Text="All" Value="All"></asp:ListItem></asp:DropDownList>
                                     </div>
+                                    <%-- Date validation error label (Fix #9) --%>
+                                    <asp:Label ID="lblDateError" runat="server" CssClass="date-error" Visible="false"></asp:Label>
                                     <div class="filter-actions">
                                         <asp:Button ID="btnList" runat="server" Text="List" CssClass="btn-list" OnClick="btnList_Click" />
                                     </div>

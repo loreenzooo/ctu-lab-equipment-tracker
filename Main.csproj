@@ -101,6 +101,7 @@
     <Content Include="App_Data\BankingSystemDB_log.ldf">
       <DependentUpon>BankingSystemDB.mdf</DependentUpon>
     </Content>
+    <Content Include="ChangePassword.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -139,6 +140,7 @@
     <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\js\bootstrap.esm.min.js" />
     <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\js\bootstrap.js" />
     <Content Include="Content\bootstrap\bootstrap-5.2.3-dist\js\bootstrap.min.js" />
+    <Content Include="Content\styles\ChangePassword.css" />
     <Content Include="Content\styles\Dashboard.css" />
     <Content Include="Content\styles\LandingPage.css" />
     <Content Include="Content\styles\Login.css" />
@@ -236,6 +238,13 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="ChangePassword.aspx.cs">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ChangePassword.aspx.designer.cs">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Classes\DashboardManager.cs" />
     <Compile Include="Classes\TransactionManager.cs" />
     <Compile Include="Classes\UserManager.cs" />

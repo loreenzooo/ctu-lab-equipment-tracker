@@ -42,6 +42,15 @@ namespace Main
         protected global::System.Web.UI.WebControls.LinkButton btnSidebarManage;
 
         /// <summary>
+        /// btnSidebarChangePassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnSidebarChangePassword;
+
+        /// <summary>
         /// btnSidebarLogout control.
         /// </summary>
         /// <remarks>
@@ -276,13 +285,22 @@ namespace Main
         protected global::System.Web.UI.WebControls.Button btnVerifyReceiver;
 
         /// <summary>
-        /// pnlSendMoneyForm control.
+        /// pnlReceiverInfo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlSendMoneyForm;
+        protected global::System.Web.UI.WebControls.Panel pnlReceiverInfo;
+
+        /// <summary>
+        /// lblReceiverAccountNo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblReceiverAccountNo;
 
         /// <summary>
         /// lblReceiverName control.
@@ -292,6 +310,15 @@ namespace Main
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblReceiverName;
+
+        /// <summary>
+        /// pnlSendMoneyForm control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlSendMoneyForm;
 
         /// <summary>
         /// txtSendAmount control.
@@ -391,6 +418,15 @@ namespace Main
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlType;
+
+        /// <summary>
+        /// lblDateError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDateError;
 
         /// <summary>
         /// btnList control.

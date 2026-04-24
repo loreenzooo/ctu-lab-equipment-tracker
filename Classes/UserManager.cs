@@ -60,6 +60,30 @@ namespace Main.Classes
             }
         }
 
+        // Change Password Function
+        public string ChangePassword(int accountNumber, string newPassword)
+        {
+            using (SqlConnection conn = DBConnection.GetConnection())
+            {
+                conn.Open();
+                try
+                {
+                    string query = "UPDATE Users SET password_hash = @NewPassword WHERE account_number = @AccountNo";
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@NewPassword", newPassword);
+                        cmd.Parameters.AddWithValue("@AccountNo", accountNumber);
+                        cmd.ExecuteNonQuery();
+                    }
+                    return "Success";
+                }
+                catch (Exception ex)
+                {
+                    return "Error: " + ex.Message;
+                }
+            }
+        }
+
         // Fetches Name and Date Registered for the Dashboard
         public void GetDashboardDetails(int accountNumber, out string fullName, out string dateRegistered)
         {

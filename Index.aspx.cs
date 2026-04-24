@@ -306,6 +306,11 @@ namespace Main
             BindCurrentTable();
         }
 
+        protected void btnSidebarChangePassword_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("ChangePassword.aspx");
+        }
+
         private void BindCurrentTable()
         {
             if (Session["AccountNumber"] == null) return;
