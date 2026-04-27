@@ -28,7 +28,6 @@ html, body, form {
     flex-direction: column;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
     z-index: 10;
-    overflow-y: auto;
 }
 
 .sidebar-menu {
@@ -66,78 +65,7 @@ html, body, form {
 
 .logout-btn {
     color: #ff6b6b;
-}
-
-/* ==========================================
-   Sidebar Notifications
-   ========================================== */
-.sidebar-notifications {
-    margin: 0 15px 20px 15px;
-    border-top: 1px solid #34509D;
-    padding-top: 15px;
-    flex-grow: 1;
-}
-
-.sidebar-notif-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-    padding: 0 5px;
-}
-
-
-.sidebar-notif-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: #EBA800;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.sidebar-notif-empty {
-    font-size: 12px;
-    color: #8d949e;
-    font-style: italic;
-    padding: 5px;
-    display: block;
-}
-
-.sidebar-notif-item {
-    background-color: #1A2645;
-    border-left: 3px solid #2DD253;
-    border-radius: 8px;
-    padding: 10px 12px;
-    margin-bottom: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-    .sidebar-notif-item:hover {
-        background-color: #243560;
-        transform: translateX(3px);
-    }
-
-.sidebar-notif-amount {
-    font-size: 16px;
-    font-weight: 700;
-    color: #2DD253;
-    margin-bottom: 3px;
-}
-
-.sidebar-notif-sender {
-    font-size: 12px;
-    font-weight: 600;
-    color: #E7E7E7;
-    margin-bottom: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.sidebar-notif-date {
-    font-size: 11px;
-    color: #8d949e;
+    margin-top: auto;
 }
 
 /* ==========================================
@@ -222,7 +150,7 @@ html, body, form {
     margin: 0 0 20px 0;
 }
 
-/* --- Profile Card (Name + Account No + Date Registered) --- */
+/* Profile Card: Name + Account No + Date Registered */
 .dashboard-profile-card {
     background-color: #202F55;
     border-radius: 12px;
@@ -299,7 +227,7 @@ html, body, form {
     background-color: #34509D;
 }
 
-/* --- Stats Row (Balance + Total Sent side by side) --- */
+/* Stats Row: Balance + Total Sent side by side */
 .dashboard-stats-row {
     display: flex;
     gap: 20px;
@@ -329,11 +257,10 @@ html, body, form {
     border-left: 4px solid #4163BF;
 }
 
-
 .stat-info {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
 }
 
 .stat-label {
@@ -345,7 +272,7 @@ html, body, form {
 }
 
 .stat-value {
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 700;
     color: #E7E7E7;
 }
@@ -353,6 +280,84 @@ html, body, form {
     .stat-value.green {
         color: #2DD253;
     }
+
+/* ==========================================
+   Notifications View
+   ========================================== */
+.notif-subtitle {
+    font-size: 14px;
+    color: #8d949e;
+    margin: 0 0 15px 0;
+}
+
+.notif-divider {
+    border: none;
+    border-top: 1px solid #34509D;
+    margin: 0 0 20px 0;
+}
+
+.notif-empty {
+    font-size: 14px;
+    color: #8d949e;
+    font-style: italic;
+    display: block;
+    padding: 10px 0;
+}
+
+.notif-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1A2645;
+    border-left: 3px solid #2DD253;
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin-bottom: 12px;
+    transition: background-color 0.2s ease;
+}
+
+    .notif-item:hover {
+        background-color: #243560;
+        cursor: pointer;
+    }
+
+.notif-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.notif-sender {
+    font-size: 15px;
+    font-weight: 600;
+    color: #E7E7E7;
+}
+
+.notif-date {
+    font-size: 12px;
+    color: #8d949e;
+}
+
+.notif-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.notif-label {
+    font-size: 11px;
+    color: #8d949e;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.notif-amount {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2DD253;
+}
 
 /* ==========================================
    Action Buttons
@@ -581,7 +586,6 @@ html, body, form {
         background-color: #4cae4c;
     }
 
-/* Date validation error */
 .date-error {
     color: #ff6b6b;
     font-size: 13px;

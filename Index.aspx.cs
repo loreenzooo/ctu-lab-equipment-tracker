@@ -41,11 +41,15 @@ namespace Main
             int viewIndex = int.Parse(clickedBtn.CommandArgument);
 
             mvMainContent.ActiveViewIndex = viewIndex;
+
+            // Reset all sidebar active states
             btnSidebarDashboard.CssClass = "menu-item";
             btnSidebarManage.CssClass = "menu-item";
+            btnSidebarNotifications.CssClass = "menu-item";
             clickedBtn.CssClass = "menu-item active";
 
             if (viewIndex == 0) LoadDashboardStats();
+            if (viewIndex == 2) LoadNotifications();
         }
 
         protected void btnSidebarChangePassword_Click(object sender, EventArgs e)
@@ -61,7 +65,7 @@ namespace Main
         }
 
         // ==========================================
-        // DASHBOARD STATS + NOTIFICATIONS
+        // DASHBOARD STATS
         // ==========================================
         private void LoadDashboardStats()
         {
@@ -80,11 +84,20 @@ namespace Main
             lblDashBalance.Text = balance.ToString("N2");
             lblDashTotalSent.Text = totalSent.ToString("N2");
 
-            // Profile avatar initial — uses first letter of full name
+            // Profile avatar initial
             if (!string.IsNullOrEmpty(name))
                 lblDashInitial.Text = name.Substring(0, 1).ToUpper();
+        }
 
-            // Notifications — recently received CloudMoney
+        // ==========================================
+        // NOTIFICATIONS
+        // ==========================================
+        private void LoadNotifications()
+        {
+            int currentAccountNo = Convert.ToInt32(Session["AccountNumber"]);
+            UserManager userManager = new UserManager();
+            TransactionManager txManager = new TransactionManager();
+
             DataTable rawNotifs = txManager.GetRecentReceivedTransfers(currentAccountNo);
 
             if (rawNotifs.Rows.Count == 0)
@@ -97,6 +110,7 @@ namespace Main
                 lblNoNotifications.Visible = false;
                 rptNotifications.Visible = true;
 
+                // Enrich each row with sender's full name
                 DataTable enriched = new DataTable();
                 enriched.Columns.Add("SenderName");
                 enriched.Columns.Add("Amount", typeof(decimal));

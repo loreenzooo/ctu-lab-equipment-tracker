@@ -16,29 +16,9 @@
                 <div class="sidebar-menu" style="margin-top: 20px;">
                     <asp:LinkButton ID="btnSidebarDashboard" runat="server" CssClass="menu-item active" OnClick="Sidebar_Click" CommandArgument="0">Dashboard</asp:LinkButton>
                     <asp:LinkButton ID="btnSidebarManage" runat="server" CssClass="menu-item" OnClick="Sidebar_Click" CommandArgument="1">Manage Funds</asp:LinkButton>
+                    <asp:LinkButton ID="btnSidebarNotifications" runat="server" CssClass="menu-item" OnClick="Sidebar_Click" CommandArgument="2">Notifications</asp:LinkButton>
                     <asp:LinkButton ID="btnSidebarChangePassword" runat="server" CssClass="menu-item" OnClick="btnSidebarChangePassword_Click" CausesValidation="false">Change Password</asp:LinkButton>
                     <asp:LinkButton ID="btnSidebarLogout" runat="server" CssClass="menu-item logout-btn" OnClick="btnSidebarLogout_Click" CausesValidation="false">Log-out</asp:LinkButton>
-                </div>
-
-                <%-- NOTIFICATIONS in sidebar --%>
-                <div class="sidebar-notifications">
-                    <div class="sidebar-notif-header">  
-                        <span class="sidebar-notif-title">Received CloudMoney</span>
-                    </div>
-                    <asp:Label ID="lblNoNotifications" runat="server"
-                        CssClass="sidebar-notif-empty"
-                        Text="No recent transfers received."
-                        Visible="false">
-                    </asp:Label>
-                    <asp:Repeater ID="rptNotifications" runat="server">
-                        <ItemTemplate>
-                            <div class="sidebar-notif-item">
-                                <div class="sidebar-notif-amount">+₱<%# Eval("Amount", "{0:N2}") %></div>
-                                <div class="sidebar-notif-sender">From: <%# Eval("SenderName") %></div>
-                                <div class="sidebar-notif-date"><%# Eval("Date", "{0:MM/dd/yyyy hh:mm tt}") %></div>
-                            </div>
-                        </ItemTemplate>
-                    </asp:Repeater>
                 </div>
             </div>
 
@@ -57,12 +37,12 @@
                 <div class="content-container">
                     <asp:MultiView ID="mvMainContent" runat="server" ActiveViewIndex="0">
 
-                        <%-- ==================== DASHBOARD VIEW ==================== --%>
+                        <%-- ==================== VIEW 0: DASHBOARD ==================== --%>
                         <asp:View ID="vwDashboardStats" runat="server">
 
                             <h2 class="dashboard-title">My Dashboard</h2>
 
-                            <%-- ROW 1: Profile Info Card --%>
+                            <%-- Profile Card: Name, Account No, Date Registered --%>
                             <div class="dashboard-profile-card">
                                 <div class="profile-avatar">
                                     <asp:Label ID="lblDashInitial" runat="server" Text="U"></asp:Label>
@@ -85,28 +65,25 @@
                                 </div>
                             </div>
 
-                            <%-- ROW 2: Balance Cards side by side --%>
+                            <%-- Stats Row: Balance and Total Sent side by side --%>
                             <div class="dashboard-stats-row">
-
                                 <div class="stat-card balance-card">
                                     <div class="stat-info">
                                         <span class="stat-label">Total Current Balance</span>
-                                        <span class="stat-value green">₱<asp:Label ID="lblDashBalance" runat="server"></asp:Label></span>
+                                        <span class="stat-value green">&#8369;<asp:Label ID="lblDashBalance" runat="server"></asp:Label></span>
                                     </div>
                                 </div>
-
                                 <div class="stat-card sent-card">
                                     <div class="stat-info">
                                         <span class="stat-label">Total Sent Amount</span>
-                                        <span class="stat-value">₱<asp:Label ID="lblDashTotalSent" runat="server"></asp:Label></span>
+                                        <span class="stat-value">&#8369;<asp:Label ID="lblDashTotalSent" runat="server"></asp:Label></span>
                                     </div>
                                 </div>
-
                             </div>
 
                         </asp:View>
 
-                        <%-- ==================== MANAGE FUNDS VIEW ==================== --%>
+                        <%-- ==================== VIEW 1: MANAGE FUNDS ==================== --%>
                         <asp:View ID="vwManageFunds" runat="server">
 
                             <div class="card action-container">
@@ -121,7 +98,7 @@
                                     <asp:View ID="vwDeposit" runat="server">
                                         <div class="action-panel">
                                             <h3>Deposit Funds</h3>
-                                            <p style="font-size:12px; color:#A0AABF;">Min: ₱100 | Max: ₱2,000 | Must be divisible by 100</p>
+                                            <p style="font-size:12px; color:#A0AABF;">Min: &#8369;100 | Max: &#8369;2,000 | Must be divisible by 100</p>
                                             <asp:TextBox ID="txtDepositAmount" runat="server" CssClass="form-input" placeholder="Amount"></asp:TextBox>
                                             <asp:Button ID="btnSubmitDeposit" runat="server" Text="Confirm Deposit" CssClass="btn-submit" OnClick="btnSubmitDeposit_Click" />
                                         </div>
@@ -130,8 +107,8 @@
                                     <asp:View ID="vwWithdraw" runat="server">
                                         <div class="action-panel">
                                             <h3>Withdraw Funds</h3>
-                                            <p style="color:#2DD253; font-weight:bold;">Current Balance: ₱<asp:Label ID="lblWithdrawBalance" runat="server"></asp:Label></p>
-                                            <p style="font-size:12px; color:#A0AABF;">Min: ₱100 | Max: ₱2,000 | Must be divisible by 100</p>
+                                            <p style="color:#2DD253; font-weight:bold;">Current Balance: &#8369;<asp:Label ID="lblWithdrawBalance" runat="server"></asp:Label></p>
+                                            <p style="font-size:12px; color:#A0AABF;">Min: &#8369;100 | Max: &#8369;2,000 | Must be divisible by 100</p>
                                             <asp:TextBox ID="txtWithdrawAmount" runat="server" CssClass="form-input" placeholder="Amount"></asp:TextBox>
                                             <asp:Button ID="btnSubmitWithdraw" runat="server" Text="Confirm Withdraw" CssClass="btn-submit" OnClick="btnSubmitWithdraw_Click" />
                                         </div>
@@ -158,7 +135,7 @@
                                             </asp:Panel>
 
                                             <asp:Panel ID="pnlSendMoneyForm" runat="server" Visible="false" style="width:100%; display:flex; flex-direction:column; align-items:center; gap:10px;">
-                                                <p style="font-size:12px; color:#A0AABF;">Min: ₱100 | Max: ₱2,000 | Must be divisible by 100</p>
+                                                <p style="font-size:12px; color:#A0AABF;">Min: &#8369;100 | Max: &#8369;2,000 | Must be divisible by 100</p>
                                                 <asp:TextBox ID="txtSendAmount" runat="server" CssClass="form-input" placeholder="Amount"></asp:TextBox>
                                                 <asp:TextBox ID="txtSendPassword" runat="server" CssClass="form-input" placeholder="Enter Your Password" TextMode="Password"></asp:TextBox>
                                                 <asp:Button ID="btnSubmitSend" runat="server" Text="Send Money" CssClass="btn-submit" OnClick="btnSubmitSend_Click" />
@@ -250,6 +227,39 @@
                                     </asp:View>
 
                                 </asp:MultiView>
+                            </div>
+                        </asp:View>
+
+                        <%-- ==================== VIEW 2: NOTIFICATIONS ==================== --%>
+                        <asp:View ID="vwNotifications" runat="server">
+                            <div class="card" style="max-width: 700px; margin: 0 auto;">
+                                <h2 class="dashboard-title">Notifications</h2>
+                                <p class="notif-subtitle">Recently received CloudMoney transfers</p>
+                                <hr class="notif-divider" />
+
+                                <%-- Shown when no transfers received --%>
+                                <asp:Label ID="lblNoNotifications" runat="server"
+                                    CssClass="notif-empty"
+                                    Text="You have no recent CloudMoney received."
+                                    Visible="false">
+                                </asp:Label>
+
+                                <%-- One card per received transfer --%>
+                                <asp:Repeater ID="rptNotifications" runat="server">
+                                    <ItemTemplate>
+                                        <div class="notif-item">
+                                            <div class="notif-left">
+                                                <span class="notif-sender"><%# Eval("SenderName") %></span>
+                                                <span class="notif-date"><%# Eval("Date", "{0:MM/dd/yyyy hh:mm tt}") %></span>
+                                            </div>
+                                            <div class="notif-right">
+                                                <span class="notif-label">Received</span>
+                                                <span class="notif-amount">+&#8369;<%# Eval("Amount", "{0:N2}") %></span>
+                                            </div>
+                                        </div>
+                                    </ItemTemplate>
+                                </asp:Repeater>
+
                             </div>
                         </asp:View>
 
